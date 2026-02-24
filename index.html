@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUXE Art Gallery — Contemporary & Modern Art</title>
+    <meta name="description"
+        content="LUXE Art Gallery showcases contemporary masterpieces from world-renowned artists. Explore curated collections of paintings, sculptures, and digital art.">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- AOS (Animate On Scroll) -->
+    <!-- Spline 3D Viewer -->
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.36/build/spline-viewer.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ======= PRELOADER ======= -->
+    <div id="preloader">
+        <div class="preloader-inner">
+            <div class="preloader-ring"></div>
+            <span class="preloader-text">LUXE</span>
+        </div>
+    </div>
+
+    <!-- ======= NAVBAR ======= -->
+    <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <span class="brand-icon">◆</span> LUXE
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+                aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="toggler-bar"></span>
+                <span class="toggler-bar"></span>
+                <span class="toggler-bar"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link active" href="#hero">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#admins">Admins</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-outline-gold" href="#gallery">Explore Art</a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <button class="theme-toggle" id="themeToggle" aria-label="Toggle Theme">
+                            <i class="bi bi-sun-fill"></i>
+                            <i class="bi bi-moon-stars-fill"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ======= HERO SECTION ======= -->
+    <section id="hero" class="hero-section">
+        <div class="hero-bg-overlay"></div>
+        <div class="hero-particles" id="heroParticles"></div>
+        <div class="container h-100 d-flex align-items-center position-relative">
+            <div class="row w-100 align-items-center">
+                <div class="col-lg-7" data-aos="fade-right" data-aos-duration="1200">
+                    <span class="hero-badge">EST. 2026 — CONTEMPORARY ART</span>
+                    <h1 class="hero-title">
+                        Where Art <br>
+                        Meets <span class="text-gradient">Emotion</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Discover curated collections of extraordinary contemporary artworks
+                        from visionary artists around the world.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#gallery" class="btn btn-gold btn-lg me-3">
+                            <i class="bi bi-grid-3x3-gap me-2"></i>View Collection
+                        </a>
+                        <a href="#about" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-play-circle me-2"></i>Our Story
+                        </a>
+                    </div>
+                    <div class="hero-stats mt-5">
+                        <div class="stat-item">
+                            <span class="stat-number" data-count="250">0</span><span class="stat-plus">+</span>
+                            <span class="stat-label">Artworks</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-count="45">0</span><span class="stat-plus">+</span>
+                            <span class="stat-label">Admins</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-count="12">0</span>
+                            <span class="stat-label">Exhibitions</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 d-none d-lg-block" data-aos="fade-left" data-aos-duration="1200"
+                    data-aos-delay="300">
+                    <div class="hero-image-stack">
+                        <div class="hero-frame hero-frame-1">
+                            <img src="images/art1.png" alt="Featured Abstract Art">
+                        </div>
+                        <div class="hero-frame hero-frame-2">
+                            <img src="images/art2.png" alt="Featured Cityscape Art">
+                        </div>
+                        <div class="hero-frame-glow"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#gallery" class="scroll-indicator" aria-label="Scroll down">
+            <div class="scroll-mouse">
+                <div class="scroll-wheel"></div>
+            </div>
+            <span>Scroll to explore</span>
+        </a>
+    </section>
+
+    <!-- ======= GALLERY SECTION ======= -->
+    <section id="gallery" class="gallery-section section-padding">
+        <div class="container">
+            <div class="section-header text-center" data-aos="fade-up">
+                <span class="section-tag">Our Collection</span>
+                <h2 class="section-title">Curated <span class="text-gradient">Masterpieces</span></h2>
+                <p class="section-desc">Explore our exclusive collection of contemporary artworks spanning multiple
+                    styles and mediums</p>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="filter-bar text-center" data-aos="fade-up" data-aos-delay="100">
+                <button class="filter-btn active" data-filter="all">All Works</button>
+                <button class="filter-btn" data-filter="painting">Paintings</button>
+                <button class="filter-btn" data-filter="digital">Digital Art</button>
+                <button class="filter-btn" data-filter="sculpture">Sculptures</button>
+                <button class="filter-btn" data-filter="photography">Photography</button>
+                <button class="filter-btn" data-filter="3d">3D Art</button>
+            </div>
+
+            <!-- Upload Button -->
+            <div class="upload-btn-container" data-aos="fade-up" data-aos-delay="150">
+                <button class="btn btn-outline-gold" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                    <i class="bi bi-cloud-upload me-2"></i>Upload Your Art
+                </button>
+            </div>
+
+            <!-- Gallery Carousel Wrapper -->
+            <div class="gallery-carousel-wrapper">
+                <button class="gallery-nav-btn gallery-nav-prev" id="galleryPrevBtn" aria-label="Scroll Left">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+
+                <!-- Gallery Grid (now a flex container) -->
+                <div class="gallery-grid" id="galleryGrid">
+
+                    <div class="gallery-item" data-category="painting" data-aos="fade-up" data-aos-delay="100">
+                        <div class="gallery-card">
+                            <div class="gallery-img-wrapper">
+                                <img src="images/art1.png" alt="Chromatic Dreams" loading="lazy">
+                                <div class="gallery-overlay">
+                                    <div class="overlay-content">
+                                        <span class="artwork-category">Painting</span>
+                                        <h3 class="artwork-title">Chromatic Dreams</h3>
+                                        <p class="artwork-artist">By Elena Vasquez</p>
+                                        <button class="btn-view" onclick="openLightbox(this)"><i
+                                                class="bi bi-arrows-fullscreen"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gallery-info">
+                                <h4>Chromatic Dreams</h4>
+                                <p>Oil on Canvas — 2026</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-category="digital" data-aos="fade-up" data-aos-delay="150">
+                        <div class="gallery-card">
+                            <div class="gallery-img-wrapper">
+                                <img src="images/art2.png" alt="Neon Metropolis" loading="lazy">
+                                <div class="gallery-overlay">
+                                    <div class="overlay-content">
+                                        <span class="artwork-category">Digital Art</span>
+                                        <h3 class="artwork-title">Neon Metropolis</h3>
+                                        <p class="artwork-artist">By Marcus Chen</p>
+                                        <button class="btn-view" onclick="openLightbox(this)"><i
+                                                class="bi bi-arrows-fullscreen"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gallery-info">
+                                <h4>Neon Metropolis</h4>
+                                <p>Digital Painting — 2024</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-category="painting" data-aos="fade-up" data-aos-delay="200">
+                        <div class="gallery-card">
+                            <div class="gallery-img-wrapper">
+                                <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=600&h=750&fit=crop"
+                                    alt="Whispers of Azure" loading="lazy">
+                                <div class="gallery-overlay">
+                                    <div class="overlay-content">
+                                        <span class="artwork-category">Painting</span>
+                                        <h3 class="artwork-title">Whispers of Azure</h3>
+                                        <p class="artwork-artist">By Sofia Laurent</p>
+                                        <button class="btn-view" onclick="openLightbox(this)"><i
+                                                class="bi bi-arrows-fullscreen"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gallery-info">
+                                <h4>Whispers of Azure</h4>
+                                <p>Acrylic on Canvas — 2023</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-category="sculpture" data-aos="fade-up" data-aos-delay="100">
+                        <div class="gallery-card">
+                            <div class="gallery-img-wrapper">
+                                <img src="https://images.unsplash.com/photo-1544413660-299165566b1d?w=600&h=750&fit=crop"
+                                    alt="Eternal Form" loading="lazy">
+                                <div class="gallery-overlay">
+                                    <div class="overlay-content">
+                                        <span class="artwork-category">Sculpture</span>
+                                        <h3 class="artwork-title">Eternal Form</h3>
+                                        <p class="artwork-artist">By James Okoro</p>
+                                        <button class="btn-view" onclick="openLightbox(this)"><i
+                                                class="bi bi-arrows-fullscreen"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gallery-info">
+                                <h4>Eternal Form</h4>
+                                <p>Bronze Sculpture — 2024</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-category="photography" data-aos="fade-up" data-aos-delay="150">
+                        <div class="gallery-card">
+                            <div class="gallery-img-wrapper">
+                                <img src="https://images.unsplash.com/photo-1549490349-8643362247b5?w=600&h=750&fit=crop"
+                                    alt="Luminous Horizon" loading="lazy">
+                                <div class="gallery-overlay">
+                                    <div class="overlay-content">
+                                        <span class="artwork-category">Photography</span>
+                                        <h3 class="artwork-title">Luminous Horizon</h3>
+                                        <p class="artwork-artist">By Amara Singh</p>
+                                        <button class="btn-view" onclick="openLightbox(this)"><i
+                                                class="bi bi-arrows-fullscreen"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gallery-info">
+                                <h4>Luminous Horizon</h4>
+                                <p>Photography — 2024</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-category="digital" data-aos="fade-up" data-aos-delay="200">
+                        <div class="gallery-card">
+                            <div class="gallery-img-wrapper">
+                                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&h=750&fit=crop"
+                                    alt="Digital Nebula" loading="lazy">
+                                <div class="gallery-overlay">
+                                    <div class="overlay-content">
+                                        <span class="artwork-category">Digital Art</span>
+                                        <h3 class="artwork-title">Digital Nebula</h3>
+                                        <p class="artwork-artist">By Kai Tanaka</p>
+                                        <button class="btn-view" onclick="openLightbox(this)"><i
+                                                class="bi bi-arrows-fullscreen"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gallery-info">
+                                <h4>Digital Nebula</h4>
+                                <p>Digital Art — 2024</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-category="painting" data-aos="fade-up" data-aos-delay="100">
+                        <div class="gallery-card">
+                            <div class="gallery-img-wrapper">
+                                <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&h=750&fit=crop"
+                                    alt="Golden Reverie" loading="lazy">
+                                <div class="gallery-overlay">
+                                    <div class="overlay-content">
+                                        <span class="artwork-category">Painting</span>
+                                        <h3 class="artwork-title">Golden Reverie</h3>
+                                        <p class="artwork-artist">By Lena Petrova</p>
+                                        <button class="btn-view" onclick="openLightbox(this)"><i
+                                                class="bi bi-arrows-fullscreen"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gallery-info">
+                                <h4>Golden Reverie</h4>
+                                <p>Oil on Canvas — 2023</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-category="photography" data-aos="fade-up" data-aos-delay="150">
+                        <div class="gallery-card">
+                            <div class="gallery-img-wrapper">
+                                <img src="https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=600&h=750&fit=crop"
+                                    alt="Silent Poetry" loading="lazy">
+                                <div class="gallery-overlay">
+                                    <div class="overlay-content">
+                                        <span class="artwork-category">Photography</span>
+                                        <h3 class="artwork-title">Silent Poetry</h3>
+                                        <p class="artwork-artist">By Yuki Morimoto</p>
+                                        <button class="btn-view" onclick="openLightbox(this)"><i
+                                                class="bi bi-arrows-fullscreen"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gallery-info">
+                                <h4>Silent Poetry</h4>
+                                <p>Photography — 2024</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-category="sculpture" data-aos="fade-up" data-aos-delay="200">
+                        <div class="gallery-card">
+                            <div class="gallery-img-wrapper">
+                                <img src="https://images.unsplash.com/photo-1561214078-f3247647fc5e?w=600&h=750&fit=crop"
+                                    alt="Fractured Harmony" loading="lazy">
+                                <div class="gallery-overlay">
+                                    <div class="overlay-content">
+                                        <span class="artwork-category">Sculpture</span>
+                                        <h3 class="artwork-title">Fractured Harmony</h3>
+                                        <p class="artwork-artist">By Aiden Brooks</p>
+                                        <button class="btn-view" onclick="openLightbox(this)"><i
+                                                class="bi bi-arrows-fullscreen"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gallery-info">
+                                <h4>Fractured Harmony</h4>
+                                <p>Marble Sculpture — 2024</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-category="3d" data-aos="fade-up" data-aos-delay="250">
+                        <div class="gallery-card">
+                            <div class="gallery-img-wrapper">
+                                <img src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=600&h=750&fit=crop"
+                                    alt="Ethereal Geometry" loading="lazy">
+                                <div class="gallery-overlay">
+                                    <div class="overlay-content">
+                                        <span class="artwork-category">3D Art</span>
+                                        <h3 class="artwork-title">Ethereal Geometry</h3>
+                                        <p class="artwork-artist">By Julian Vance</p>
+                                        <button class="btn-view" onclick="openLightbox(this)"><i
+                                                class="bi bi-arrows-fullscreen"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gallery-info">
+                                <h4>Ethereal Geometry</h4>
+                                <p>3D Render — 2024</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-category="3d" data-aos="fade-up" data-aos-delay="300">
+                        <div class="gallery-card">
+                            <div class="gallery-img-wrapper">
+                                <img src="https://cdn.dribbble.com/userupload/17512806/file/original-f7202d9196b01bcef54868f7fbe1ad98.png?resize=752x"
+                                    srcset="https://cdn.dribbble.com/userupload/17512806/file/original-f7202d9196b01bcef54868f7fbe1ad98.png?resize=400x 400w, 
+                                        https://cdn.dribbble.com/userupload/17512806/file/original-f7202d9196b01bcef54868f7fbe1ad98.png?resize=752x 752w, 
+                                        https://cdn.dribbble.com/userupload/17512806/file/original-f7202d9196b01bcef54868f7fbe1ad98.png?resize=1200x 1200w"
+                                    sizes="(max-width: 768px) 100vw, (max-width: 992px) 50vw, 33vw"
+                                    alt="E-commerce 3D Animation" loading="lazy">
+                                <div class="gallery-overlay">
+                                    <div class="overlay-content">
+                                        <span class="artwork-category">3D Art</span>
+                                        <h3 class="artwork-title">Digital Commerce 3D</h3>
+                                        <p class="artwork-artist">By Dribbble Creator</p>
+                                        <button class="btn-view" onclick="openLightbox(this)"><i
+                                                class="bi bi-arrows-fullscreen"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gallery-info">
+                                <h4>Digital Commerce 3D</h4>
+                                <p>3D Animation Concept — 2024</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-category="3d" data-aos="fade-up" data-aos-delay="300">
+                        <div class="gallery-card">
+                            <div class="gallery-img-wrapper">
+                                <!-- Placeholder image while Spline loads -->
+                                <img src="https://images.unsplash.com/photo-1614850715649-1d0106293cb1?w=600&h=750&fit=crop"
+                                    alt="The Music Salon" loading="lazy">
+                                <!-- Spline 3D Embed - Interactive Room -->
+                                <spline-viewer
+                                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5;"
+                                    url="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode"></spline-viewer>
+                            </div>
+                            <div class="gallery-info">
+                                <h4>The Music Salon (Interactive)</h4>
+                                <p>3D Experience — Drag to rotate</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Spacer element to allow satisfying scroll past the last item -->
+                    <div class="gallery-item-spacer"></div>
+
+                </div> <!-- End gallery-grid -->
+
+                <button class="gallery-nav-btn gallery-nav-next" id="galleryNextBtn" aria-label="Scroll Right">
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+            </div> <!-- End gallery-carousel-wrapper -->
+        </div>
+    </section>
+
+    <!-- ======= MARQUEE / TICKER ======= -->
+    <div class="marquee-section">
+        <div class="marquee-track">
+            <div class="marquee-content">
+                <span>★ CONTEMPORARY ART</span>
+                <span>★ ABSTRACT EXPRESSIONISM</span>
+                <span>★ DIGITAL MASTERPIECES</span>
+                <span>★ BRONZE SCULPTURES</span>
+                <span>★ FINE ART PHOTOGRAPHY</span>
+                <span>★ 3D ARTWORKS</span>
+                <span>★ LIMITED EDITIONS</span>
+                <span>★ CONTEMPORARY ART</span>
+                <span>★ ABSTRACT EXPRESSIONISM</span>
+                <span>★ DIGITAL MASTERPIECES</span>
+                <span>★ BRONZE SCULPTURES</span>
+                <span>★ FINE ART PHOTOGRAPHY</span>
+                <span>★ 3D ARTWORKS</span>
+                <span>★ LIMITED EDITIONS</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= ABOUT SECTION ======= -->
+    <section id="about" class="about-section section-padding">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6" data-aos="fade-right" data-aos-duration="1000">
+                    <div class="about-images">
+                        <div class="about-img-main">
+                            <img src="https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600&h=700&fit=crop"
+                                alt="Gallery Interior">
+                        </div>
+                        <div class="about-img-accent">
+                            <img src="images/art1.png" alt="Featured Art Piece">
+                        </div>
+                        <div class="about-experience-badge">
+                            <span class="exp-number">10+</span>
+                            <span class="exp-text">Years of<br>Excellence</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left" data-aos-duration="1000">
+                    <div class="about-content">
+                        <span class="section-tag">Who We Are</span>
+                        <h2 class="section-title">A Sanctuary for <span class="text-gradient">Creative Souls</span></h2>
+                        <p class="about-text">
+                            LUXE Art Gallery was founded with a singular vision: to bridge the gap
+                            between emerging talent and art enthusiasts worldwide. Our carefully
+                            curated collection represents the pinnacle of contemporary artistic expression.
+                        </p>
+                        <p class="about-text">
+                            Each piece in our collection is handpicked by our team of expert curators,
+                            ensuring that every artwork tells a compelling story and resonates with
+                            emotional depth.
+                        </p>
+                        <div class="about-features">
+                            <div class="feature-item">
+                                <div class="feature-icon"><i class="bi bi-palette2"></i></div>
+                                <div>
+                                    <h5>Curated Excellence</h5>
+                                    <p>Every piece is handpicked by expert curators</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon"><i class="bi bi-globe2"></i></div>
+                                <div>
+                                    <h5>Global Artists</h5>
+                                    <p>Showcasing talent from over 30 countries</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon"><i class="bi bi-shield-check"></i></div>
+                                <div>
+                                    <h5>Authenticity Guaranteed</h5>
+                                    <p>Certificate of authenticity with every artwork</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======= ADMINS SECTION ======= -->
+    <section id="admins" class="artists-section section-padding">
+        <div class="container">
+            <div class="section-header text-center" data-aos="fade-up">
+                <span class="section-tag">Featured Talent</span>
+                <h2 class="section-title">Meet Our <span class="text-gradient">Admins</span></h2>
+                <p class="section-desc">Visionary creators from around the globe who define the future of contemporary
+                    art</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="artist-card">
+                        <div class="artist-img">
+                            <img src="./images/Raunak Chirania.jpeg" alt="Raunak Chirania">
+                            <div class="artist-social">
+                                <a href="https://www.instagram.com/raunak.chirania/?hl=en"><i
+                                        class="bi bi-instagram"></i></a>
+                                <a href="#"><i class="bi bi-twitter-x"></i></a>
+                            </div>
+                        </div>
+                        <div class="artist-info">
+                            <h4>Raunak Chirania</h4>
+                            <p>Abstract Expressionism</p>
+                            <span class="artist-location"><i class="bi bi-geo-alt"></i> Naugachia, Bhagalpur,
+                                Bihar</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="artist-card">
+                        <div class="artist-img">
+                            <img src="./images/Bhaskar Kumar Bhakat.jpeg" alt="Bhaskar Kumar Bhakat">
+                            <div class="artist-social">
+                                <a href="https://www.instagram.com/wtf_bhaskarr?igsh=eHRmYXBhcDZydm5u"><i
+                                        class="bi bi-instagram"></i></a>
+                                <a href="https://x.com/bhaskar16443536?s=11"><i class="bi bi-twitter-x"></i></a>
+                            </div>
+                        </div>
+                        <div class="artist-info">
+                            <h4>Bhaskar Kumar Bhakat</h4>
+                            <p>Digital & Mixed Media</p>
+                            <span class="artist-location"><i class="bi bi-geo-alt"></i> Ghatsila, Jamshedpur,
+                                Jharkhand</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="artist-card">
+                        <div class="artist-img">
+                            <img src="./images/PK Swaraj.jpeg" alt="PK Swaraj">
+                            <div class="artist-social">
+                                <a
+                                    href="https://www.instagram.com/swaraj04_?igsh=MTYwNnVvYTczcGY1Zg%3D%3D&utm_source=qr"><i
+                                        class="bi bi-instagram"></i></a>
+                                <a href="#"><i class="bi bi-twitter-x"></i></a>
+                            </div>
+                        </div>
+                        <div class="artist-info">
+                            <h4>PK Swaraj</h4>
+                            <p>Contemporary Realism</p>
+                            <span class="artist-location"><i class="bi bi-geo-alt"></i> Jajpur Town, Odisha</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="artist-card">
+                        <div class="artist-img">
+                            <img src="./images/Priyanshu Sekhar Sahoo.jpeg" alt="Priyanshu Sekhar Sahoo">
+                            <div class="artist-social">
+                                <a href="https://www.instagram.com/_.b_i_c_k_y._06?igsh=aWJ1bnN4eHJodTds"><i
+                                        class="bi bi-instagram"></i></a>
+                                <a href="#"><i class="bi bi-twitter-x"></i></a>
+                            </div>
+                        </div>
+                        <div class="artist-info">
+                            <h4>Priyanshu Sekhar Sahoo</h4>
+                            <p>Down Syndrome Artist</p>
+                            <span class="artist-location"><i class="bi bi-geo-alt"></i> Kendrapada, Odisha</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======= TESTIMONIALS ======= -->
+    <section class="testimonials-section section-padding">
+        <div class="container">
+            <div class="section-header text-center" data-aos="fade-up">
+                <span class="section-tag">Voices</span>
+                <h2 class="section-title">What Collectors <span class="text-gradient">Say</span></h2>
+            </div>
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="testimonial-text">"LUXE Gallery curates with impeccable taste. Every piece I've
+                            acquired has become a cherished centerpiece of my collection."</p>
+                        <div class="testimonial-author">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face"
+                                alt="Robert Kim">
+                            <div>
+                                <h5>Robert Kim</h5>
+                                <span>Private Collector</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="testimonial-text">"The gallery space is breathtaking, and the virtual tour experience
+                            is unlike anything I've seen. Truly a world-class destination."</p>
+                        <div class="testimonial-author">
+                            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=80&h=80&fit=crop&crop=face"
+                                alt="Maria Santos">
+                            <div>
+                                <h5>Maria Santos</h5>
+                                <span>Art Critic, ArtReview</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="testimonial-text">"As an emerging artist, LUXE gave me the platform to showcase my
+                            work to a global audience. Their support is unmatched."</p>
+                        <div class="testimonial-author">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face"
+                                alt="David Okafor">
+                            <div>
+                                <h5>David Okafor</h5>
+                                <span>Featured Artist</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======= NEWSLETTER CTA ======= -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-wrapper" data-aos="zoom-in" data-aos-duration="800">
+                <div class="row align-items-center">
+                    <div class="col-lg-7">
+                        <h2>Stay Inspired</h2>
+                        <p>Subscribe to receive exclusive previews of new collections, artist interviews, and private
+                            viewing invitations.</p>
+                    </div>
+                    <div class="col-lg-5">
+                        <form class="cta-form" onsubmit="handleSubscribe(event)">
+                            <div class="input-group">
+                                <input type="email" class="form-control" placeholder="Enter your email" required>
+                                <button class="btn btn-gold" type="submit">Subscribe</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======= CONTACT SECTION ======= -->
+    <section id="contact" class="contact-section section-padding">
+        <div class="container">
+            <div class="section-header text-center" data-aos="fade-up">
+                <span class="section-tag">Get In Touch</span>
+                <h2 class="section-title">Visit Our <span class="text-gradient">Gallery</span></h2>
+                <p class="section-desc">We'd love to hear from you. Reach out for inquiries, commissions, or to schedule
+                    a private viewing.</p>
+            </div>
+            <div class="row g-5">
+                <div class="col-lg-5" data-aos="fade-right">
+                    <div class="contact-info-wrapper">
+                        <div class="contact-info-card">
+                            <div class="contact-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                            <div>
+                                <h5>Visit Us</h5>
+                                <p>Centurion University Jatani<br>Bhubaneswar,Odisha, 752050</p>
+                            </div>
+                        </div>
+                        <div class="contact-info-card">
+                            <div class="contact-icon"><i class="bi bi-clock-fill"></i></div>
+                            <div>
+                                <h5>Gallery Hours</h5>
+                                <p>Tue — Sat: 10AM — 7PM<br>Sunday: 12PM — 5PM</p>
+                            </div>
+                        </div>
+                        <div class="contact-info-card">
+                            <div class="contact-icon"><i class="bi bi-envelope-fill"></i></div>
+                            <div>
+                                <h5>Email Us</h5>
+                                <p>hello@luxegallery.com<br>press@luxegallery.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-info-card">
+                            <div class="contact-icon"><i class="bi bi-telephone-fill"></i></div>
+                            <div>
+                                <h5>Call Us</h5>
+                                <p>+91 8210691336<br>Mon — Sat, 9AM — 6PM</p>
+                            </div>
+                        </div>
+                        <div class="contact-socials">
+                            <a href="https://www.instagram.com/raunak.chirania/?hl=en" class="social-link"><i
+                                    class="bi bi-instagram"></i></a>
+                            <a href="https://x.com/bhaskar16443536?s=11" class="social-link"><i
+                                    class="bi bi-twitter-x"></i></a>
+                            <a href="#" class="social-link"><i class="bi bi-facebook"></i></a>
+                            <a href="#" class="social-link"><i class="bi bi-pinterest"></i></a>
+                            <a href="#" class="social-link"><i class="bi bi-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7" data-aos="fade-left">
+                    <div class="contact-form-wrapper">
+                        <form id="contactForm" onsubmit="handleContactSubmit(event)">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="contactName" placeholder="Your Name"
+                                            required>
+                                        <label for="contactName">Your Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="email" class="form-control" id="contactEmail"
+                                            placeholder="Your Email" required>
+                                        <label for="contactEmail">Your Email</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="contactSubject" required>
+                                            <option value="" selected disabled>Choose a subject</option>
+                                            <option value="inquiry">General Inquiry</option>
+                                            <option value="purchase">Purchase Inquiry</option>
+                                            <option value="commission">Commission Request</option>
+                                            <option value="exhibition">Exhibition Partnership</option>
+                                            <option value="press">Press & Media</option>
+                                        </select>
+                                        <label for="contactSubject">Subject</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="contactMessage" placeholder="Your Message"
+                                            style="height: 150px" required></textarea>
+                                        <label for="contactMessage">Your Message</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-gold btn-lg w-100">
+                                        <i class="bi bi-send me-2"></i>Send Message
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======= FOOTER ======= -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-brand">
+                        <h3><span class="brand-icon">◆</span> LUXE</h3>
+                        <p>A premier destination for contemporary art, connecting visionary artists with collectors
+                            worldwide since 2014.</p>
+                        <div class="footer-socials">
+                            <a href="#"><i class="bi bi-instagram"></i></a>
+                            <a href="#"><i class="bi bi-twitter-x"></i></a>
+                            <a href="#"><i class="bi bi-facebook"></i></a>
+                            <a href="#"><i class="bi bi-pinterest"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <div class="footer-links">
+                        <h5>Explore</h5>
+                        <ul>
+                            <li><a href="#gallery">Gallery</a></li>
+                            <li><a href="#artists">Admins</a></li>
+                            <li><a href="#about">About Us</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-links">
+                        <h5>Services</h5>
+                        <ul>
+                            <li><a href="#">Art Consulting</a></li>
+                            <li><a href="#">Private Viewings</a></li>
+                            <li><a href="#">Commissions</a></li>
+                            <li><a href="#">Art Storage</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-links">
+                        <h5>Legal</h5>
+                        <ul>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Copyright Notice</a></li>
+                            <li><a href="#">Cookie Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 LUXE Art Gallery. All Rights Reserved. All artworks are protected by copyright.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ======= UPLOAD ARTWORK MODAL ======= -->
+    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadModalLabel">Add Your Artwork</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="uploadArtForm">
+                        <div class="mb-3">
+                            <label for="artImage" class="form-label">Artwork Image</label>
+                            <input class="form-control" type="file" id="artImage" accept="image/*" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="artTitle" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="artTitle" required
+                                placeholder="e.g. Starry Night">
+                        </div>
+                        <div class="mb-3">
+                            <label for="artArtist" class="form-label">Artist Name</label>
+                            <input type="text" class="form-control" id="artArtist" required
+                                placeholder="e.g. Vincent van Gogh">
+                        </div>
+                        <div class="mb-4">
+                            <label for="artCategory" class="form-label">Category</label>
+                            <select class="form-select" id="artCategory" required>
+                                <option value="painting">Painting</option>
+                                <option value="digital">Digital Art</option>
+                                <option value="sculpture">Sculpture</option>
+                                <option value="photography">Photography</option>
+                                <option value="3d">3D Art</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-gold w-100">Upload to Gallery</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= LIGHTBOX MODAL ======= -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close lightbox"><i
+                class="bi bi-x-lg"></i></button>
+        <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)" aria-label="Previous"><i
+                class="bi bi-chevron-left"></i></button>
+        <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)" aria-label="Next"><i
+                class="bi bi-chevron-right"></i></button>
+        <div class="lightbox-content">
+            <img id="lightboxImg" src="" alt="Artwork Full View">
+            <div class="lightbox-info">
+                <h3 id="lightboxTitle"></h3>
+                <p id="lightboxArtist"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= BACK TO TOP ======= -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+
+    <!-- ======= TOAST ======= -->
+    <div class="custom-toast" id="customToast">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <span id="toastMessage">Action not allowed</span>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+</body>
+
+</html>
