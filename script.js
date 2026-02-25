@@ -1,6 +1,29 @@
 /* ============================================
    LUXE ART GALLERY — INTERACTIVE SCRIPTS
    ============================================ */
+import { auth, db, storage } from './firebase-config.js';
+import {
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    signOut,
+    updateProfile
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+    collection,
+    addDoc,
+    getDocs,
+    deleteDoc,
+    doc,
+    query,
+    orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+    ref,
+    uploadBytes,
+    getDownloadURL,
+    deleteObject
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -238,16 +261,146 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ========== ART UPLOAD & LOCAL STORAGE ==========
+    // ========== USER AUTHENTICATION ==========
+    const authBtn = document.getElementById('authBtn');
+    const authBtnText = document.getElementById('authBtnText');
+    const authModalEl = document.getElementById('authModal');
+    let authModal;
+    if (authModalEl) {
+        authModal = new bootstrap.Modal(authModalEl);
+    }
+
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    const uploadBtnContainer = document.getElementById('uploadBtnContainer');
+    const loginPromptContainer = document.getElementById('loginPromptContainer');
+
+    let currentUser = null;
+
+    // Listen for auth state changes
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // User is signed in
+            currentUser = user;
+            authBtnText.textContent = 'Sign Out';
+            authBtn.classList.replace('btn-gold', 'btn-outline-gold');
+            authBtn.removeAttribute('data-bs-toggle');
+            authBtn.removeAttribute('data-bs-target');
+
+            // Show upload button, hide prompt
+            if (uploadBtnContainer) uploadBtnContainer.style.display = 'block';
+            if (loginPromptContainer) loginPromptContainer.style.display = 'none';
+        } else {
+            // User is signed out
+            currentUser = null;
+            authBtnText.textContent = 'Sign In';
+            authBtn.classList.replace('btn-outline-gold', 'btn-gold');
+            authBtn.setAttribute('data-bs-toggle', 'modal');
+            authBtn.setAttribute('data-bs-target', '#authModal');
+
+            // Hide upload button, show prompt
+            if (uploadBtnContainer) uploadBtnContainer.style.display = 'none';
+            if (loginPromptContainer) loginPromptContainer.style.display = 'block';
+        }
+    });
+
+    // Handle Login/Logout button click
+    authBtn.addEventListener('click', (e) => {
+        if (currentUser) {
+            e.preventDefault();
+            signOut(auth).then(() => {
+                showToast('Signed out successfully');
+            }).catch((error) => {
+                showToast('Error signing out: ' + error.message);
+            });
+        }
+    });
+
+    // Handle Login Submit
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const btn = loginForm.querySelector('button');
+            const originalText = btn.textContent;
+
+            btn.textContent = 'Signing in...';
+            btn.disabled = true;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    authModal.hide();
+                    loginForm.reset();
+                    showToast('Welcome back!');
+                })
+                .catch((error) => {
+                    showToast(error.message.replace('Firebase: ', ''));
+                })
+                .finally(() => {
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                });
+        });
+    }
+
+    // Handle Sign Up Submit
+    if (signupForm) {
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const btn = signupForm.querySelector('button');
+            const originalText = btn.textContent;
+
+            btn.textContent = 'Creating account...';
+            btn.disabled = true;
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Update profile with display name
+                    return updateProfile(userCredential.user, {
+                        displayName: name
+                    });
+                })
+                .then(() => {
+                    authModal.hide();
+                    signupForm.reset();
+                    showToast('Account created successfully!');
+                })
+                .catch((error) => {
+                    showToast(error.message.replace('Firebase: ', ''));
+                })
+                .finally(() => {
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                });
+        });
+    }
+
+    // ========== ART UPLOAD & FIREBASE STORAGE ==========
     const uploadForm = document.getElementById('uploadArtForm');
 
-    // Load saved artworks from local storage
-    const loadSavedArtworks = () => {
-        const savedArt = JSON.parse(localStorage.getItem('userArtworks')) || [];
-        savedArt.forEach(art => {
-            const artEl = createArtworkElement(art);
-            galleryGrid.appendChild(artEl);
-        });
+    // Load saved artworks from Firestore
+    const loadSavedArtworks = async () => {
+        // First clear out existing user uploads if any (in case of re-login)
+        const existingUploads = document.querySelectorAll('.gallery-item[data-user-upload="true"]');
+        existingUploads.forEach(el => el.remove());
+
+        try {
+            const q = query(collection(db, "artworks"));
+            const querySnapshot = await getDocs(q);
+
+            querySnapshot.forEach((doc) => {
+                const artData = doc.data();
+                artData.id = doc.id;
+                const artEl = createArtworkElement(artData);
+                galleryGrid.appendChild(artEl);
+            });
+        } catch (error) {
+            console.error("Error loading artworks: ", error);
+        }
     };
 
     const createArtworkElement = (art) => {
@@ -257,6 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
         div.className = 'gallery-item show';
         div.setAttribute('data-category', art.category);
         div.setAttribute('data-aos', 'fade-up');
+        div.setAttribute('data-user-upload', 'true');
         div.innerHTML = `
             <div class="gallery-card">
                 <div class="gallery-img-wrapper">
@@ -267,7 +421,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             <h3 class="artwork-title">${art.title}</h3>
                             <p class="artwork-artist">By ${art.artist}</p>
                             <button class="btn-view" onclick="openLightbox(this)"><i class="bi bi-arrows-fullscreen"></i></button>
-                            <button class="btn-delete" onclick="deleteArtwork('${art.id}', this)" title="Delete Artwork"><i class="bi bi-trash"></i></button>
+                            ${currentUser && currentUser.uid === art.userId ?
+                `<button class="btn-delete" onclick="deleteArtwork('${art.id}', '${art.storagePath}', this)" title="Delete Artwork"><i class="bi bi-trash"></i></button>`
+                : ''}
                         </div>
                     </div>
                 </div>
@@ -307,73 +463,103 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (uploadForm) {
-        uploadForm.addEventListener('submit', (e) => {
+        uploadForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            if (!currentUser) {
+                showToast('You must be signed in to upload artwork.');
+                return;
+            }
 
             const fileInput = document.getElementById('artImage');
             const file = fileInput.files[0];
+            const btn = uploadForm.querySelector('button[type="submit"]');
+            const originalBtnText = btn.innerHTML;
 
             if (file) {
-                const reader = new FileReader();
-                reader.onload = function (event) {
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Uploading...';
+                btn.disabled = true;
+
+                try {
+                    // 1. Upload image to Firebase Storage
+                    const uniqueFilename = `${Date.now()}-${file.name}`;
+                    const storageRef = ref(storage, `artworks/${currentUser.uid}/${uniqueFilename}`);
+
+                    const snapshot = await uploadBytes(storageRef, file);
+                    const downloadURL = await getDownloadURL(snapshot.ref);
+
+                    // 2. Save metadata to Firestore
                     const newArt = {
-                        id: 'art-' + Date.now().toString() + Math.random().toString(36).substr(2, 5),
                         title: document.getElementById('artTitle').value,
                         artist: document.getElementById('artArtist').value,
                         category: document.getElementById('artCategory').value,
-                        image: event.target.result
+                        image: downloadURL,
+                        storagePath: snapshot.ref.fullPath,
+                        userId: currentUser.uid,
+                        createdAt: new Date().toISOString()
                     };
 
-                    // Add to grid
+                    const docRef = await addDoc(collection(db, "artworks"), newArt);
+                    newArt.id = docRef.id;
+
+                    // 3. Update UI
                     const artEl = createArtworkElement(newArt);
                     galleryGrid.appendChild(artEl);
 
-                    // Save to local storage
-                    const savedArt = JSON.parse(localStorage.getItem('userArtworks')) || [];
-                    savedArt.push(newArt);
-
-                    try {
-                        localStorage.setItem('userArtworks', JSON.stringify(savedArt));
-                    } catch (err) {
-                        console.warn('Image acts perfectly for current session, but is too large to save across reloads.');
-                    }
-
-                    // Reset form and close modal
+                    // 4. Reset form
                     uploadForm.reset();
                     const modalEl = document.getElementById('uploadModal');
                     const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
                     modal.hide();
 
-                    showToast('Artwork uploaded! It has been added to the gallery.');
-                };
-                reader.readAsDataURL(file);
+                    showToast('Artwork uploaded successfully!');
+                } catch (error) {
+                    console.error("Error uploading artwork: ", error);
+                    showToast('Error uploading: ' + error.message);
+                } finally {
+                    btn.innerHTML = originalBtnText;
+                    btn.disabled = false;
+                }
             }
         });
     }
 
-    // Call load function
+    // Call load function (Now we call it once on load)
     loadSavedArtworks();
 
+    // Re-render artworks when auth state changes so delete buttons accurate
+    onAuthStateChanged(auth, (user) => {
+        currentUser = user;
+        loadSavedArtworks();
+    });
+
     // ========== DELETE ARTWORK ==========
-    window.deleteArtwork = function (id, btn) {
+    window.deleteArtwork = async function (id, storagePath, btn) {
         if (!confirm("Are you sure you want to delete this artwork?")) return;
 
-        // Remove from local storage
-        let savedArt = JSON.parse(localStorage.getItem('userArtworks')) || [];
-        savedArt = savedArt.filter(art => art.id !== id);
         try {
-            localStorage.setItem('userArtworks', JSON.stringify(savedArt));
-        } catch (e) { console.error('Failed to update storage', e); }
+            // 1. Delete from Firestore
+            await deleteDoc(doc(db, "artworks", id));
 
-        // Remove from UI
-        const card = btn.closest('.gallery-item');
-        if (card) {
-            card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-            card.style.opacity = '0';
-            card.style.transform = 'scale(0.9)';
-            setTimeout(() => card.remove(), 400);
+            // 2. Delete from Storage (if path exists)
+            if (storagePath) {
+                const storageRef = ref(storage, storagePath);
+                await deleteObject(storageRef);
+            }
+
+            // 3. Remove from UI
+            const card = btn.closest('.gallery-item');
+            if (card) {
+                card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.9)';
+                setTimeout(() => card.remove(), 400);
+            }
+            showToast('Artwork deleted successfully.');
+        } catch (error) {
+            console.error("Error deleting artwork: ", error);
+            showToast("Failed to delete artwork: " + error.message);
         }
-        showToast('Artwork deleted successfully.');
     };
 
     // ========== LIGHTBOX ==========

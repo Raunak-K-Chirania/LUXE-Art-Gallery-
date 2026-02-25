@@ -865,55 +865,6 @@ a:hover {
     opacity: 1;
 }
 
-/* ---------- UPLOAD MODAL ---------- */
-.custom-modal {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: 16px;
-    color: var(--text-primary);
-}
-
-.custom-modal .modal-header {
-    border-bottom: 1px solid var(--border-subtle);
-}
-
-.custom-modal .modal-title {
-    font-family: var(--font-display);
-    color: var(--gold);
-}
-
-.custom-modal .form-control,
-.custom-modal .form-select {
-    background: var(--bg-primary);
-    border: 1px solid var(--border-light);
-    color: var(--text-primary);
-    border-radius: 8px;
-    transition: var(--transition-fast);
-}
-
-.custom-modal .form-control:focus,
-.custom-modal .form-select:focus {
-    background: var(--bg-primary);
-    border-color: var(--gold);
-    box-shadow: 0 0 0 0.25rem rgba(201, 168, 76, 0.25);
-    color: var(--text-primary);
-}
-
-.custom-modal .form-label {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.upload-btn-container {
-    text-align: center;
-    margin-bottom: 40px;
-    margin-top: -10px;
-}
-
-[data-theme="dark"] .btn-close-white {
-    filter: invert(1) grayscale(100%) brightness(200%);
-}
 
 .overlay-content {
     width: 100%;
