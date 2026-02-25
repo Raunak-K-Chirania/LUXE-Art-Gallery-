@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 async function uploadImage() {
-    const cloudName = 'dkfxbq1g';
+    const cloudName = 'dkfxbqj1g';
     const uploadPreset = 'luxe_gallery_upload';
 
     // Read local file

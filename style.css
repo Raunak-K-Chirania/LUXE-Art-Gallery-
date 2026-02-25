@@ -1934,7 +1934,7 @@ a:hover {
     }
 
     .navbar-collapse {
-        background: rgba(10, 10, 15, 0.98);
+        background: var(--nav-bg);
         backdrop-filter: blur(20px);
         border-radius: 16px;
         padding: 20px;
