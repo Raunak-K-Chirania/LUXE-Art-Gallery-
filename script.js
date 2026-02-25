@@ -76,28 +76,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // ========== NAVBAR SCROLL EFFECT ==========
     const navbar = document.getElementById('mainNav');
     const backToTopBtn = document.getElementById('backToTop');
-    let lastScroll = 0;
+    let isScrolling = false;
 
     window.addEventListener('scroll', () => {
-        const scrollY = window.pageYOffset;
+        if (!isScrolling) {
+            window.requestAnimationFrame(() => {
+                const scrollY = window.pageYOffset;
 
-        // Navbar styling
-        if (scrollY > 80) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
+                // Navbar styling
+                if (scrollY > 80) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+
+                // Back to top button
+                if (scrollY > 600) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+
+                isScrolling = false;
+            });
+            isScrolling = true;
         }
-
-        // Back to top button
-        if (scrollY > 600) {
-            backToTopBtn.classList.add('visible');
-        } else {
-            backToTopBtn.classList.remove('visible');
-        }
-
-        // Active nav link based on section
-        updateActiveNav();
-        lastScroll = scrollY;
     });
 
     // Back to top click
@@ -105,23 +108,30 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // ========== ACTIVE NAV ON SCROLL ==========
-    function updateActiveNav() {
-        const sections = document.querySelectorAll('section[id]');
-        const scrollPos = window.pageYOffset + 120;
+    // ========== ACTIVE NAV ON SCROLL (IntersectionObserver) ==========
+    const sections = document.querySelectorAll('section[id]');
+
+    if (sections.length > 0) {
+        const navObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    const link = document.querySelector(`.nav-link[href="#${id}"]`);
+
+                    if (link) {
+                        document.querySelectorAll('.nav-link').forEach(l => {
+                            l.classList.remove('active');
+                            l.removeAttribute('aria-current');
+                        });
+                        link.classList.add('active');
+                        link.setAttribute('aria-current', 'page');
+                    }
+                }
+            });
+        }, { rootMargin: '-20% 0px -80% 0px' });
 
         sections.forEach(section => {
-            const top = section.offsetTop;
-            const height = section.offsetHeight;
-            const id = section.getAttribute('id');
-            const link = document.querySelector(`.nav-link[href="#${id}"]`);
-
-            if (link) {
-                if (scrollPos >= top && scrollPos < top + height) {
-                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
-                }
-            }
+            navObserver.observe(section);
         });
     }
 
@@ -481,12 +491,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.disabled = true;
 
                 try {
-                    // 1. Upload image to Firebase Storage
-                    const uniqueFilename = `${Date.now()}-${file.name}`;
-                    const storageRef = ref(storage, `artworks/${currentUser.uid}/${uniqueFilename}`);
+                    // 1. Upload image to Cloudinary (Unsigned)
+                    const cloudName = 'dkfxbqj1g';
+                    const uploadPreset = 'luxe_gallery_upload';
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('upload_preset', uploadPreset);
 
-                    const snapshot = await uploadBytes(storageRef, file);
-                    const downloadURL = await getDownloadURL(snapshot.ref);
+                    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+                    if (!response.ok) {
+                        throw new Error(data.error?.message || 'Failed to upload image to Cloudinary.');
+                    }
+
+                    const downloadURL = data.secure_url;
 
                     // 2. Save metadata to Firestore
                     const newArt = {
@@ -494,7 +516,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         artist: document.getElementById('artArtist').value,
                         category: document.getElementById('artCategory').value,
                         image: downloadURL,
-                        storagePath: snapshot.ref.fullPath,
+                        storagePath: data.public_id, // Store Cloudinary public_id
                         userId: currentUser.uid,
                         createdAt: new Date().toISOString()
                     };
@@ -541,10 +563,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // 1. Delete from Firestore
             await deleteDoc(doc(db, "artworks", id));
 
-            // 2. Delete from Storage (if path exists)
-            if (storagePath) {
-                const storageRef = ref(storage, storagePath);
-                await deleteObject(storageRef);
+            // 2. Delete from Storage (if path exists and is Firebase)
+            if (storagePath && storagePath.includes('/')) {
+                try {
+                    const storageRef = ref(storage, storagePath);
+                    await deleteObject(storageRef);
+                } catch (e) {
+                    console.warn("Could not delete from Firebase Storage (might be Cloudinary).", e);
+                }
             }
 
             // 3. Remove from UI
