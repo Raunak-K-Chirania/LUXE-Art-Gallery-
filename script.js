@@ -16,7 +16,8 @@ import {
     deleteDoc,
     doc,
     query,
-    orderBy
+    orderBy,
+    onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import {
     ref,
@@ -393,20 +394,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const uploadForm = document.getElementById('uploadArtForm');
 
     // Load saved artworks from Firestore
-    const loadSavedArtworks = async () => {
-        // First clear out existing user uploads if any (in case of re-login)
-        const existingUploads = document.querySelectorAll('.gallery-item[data-user-upload="true"]');
-        existingUploads.forEach(el => el.remove());
+    let unsubscribeArtworks = null;
+    const loadSavedArtworks = () => {
+        if (unsubscribeArtworks) unsubscribeArtworks();
 
         try {
             const q = query(collection(db, "artworks"));
-            const querySnapshot = await getDocs(q);
+            unsubscribeArtworks = onSnapshot(q, (querySnapshot) => {
+                // Clear existing uploads to avoid duplicates on updates
+                const existingUploads = document.querySelectorAll('.gallery-item[data-user-upload="true"]');
+                existingUploads.forEach(el => el.remove());
 
-            querySnapshot.forEach((doc) => {
-                const artData = doc.data();
-                artData.id = doc.id;
-                const artEl = createArtworkElement(artData);
-                galleryGrid.appendChild(artEl);
+                const spacer = galleryGrid ? galleryGrid.querySelector('.gallery-item-spacer') : null;
+
+                querySnapshot.forEach((doc) => {
+                    const artData = doc.data();
+                    artData.id = doc.id;
+                    const artEl = createArtworkElement(artData);
+
+                    if (galleryGrid) {
+                        if (spacer) {
+                            galleryGrid.insertBefore(artEl, spacer);
+                        } else {
+                            galleryGrid.appendChild(artEl);
+                        }
+                    }
+                });
             });
         } catch (error) {
             console.error("Error loading artworks: ", error);
@@ -419,7 +432,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const div = document.createElement('div');
         div.className = 'gallery-item show';
         div.setAttribute('data-category', art.category);
-        div.setAttribute('data-aos', 'fade-up');
         div.setAttribute('data-user-upload', 'true');
         div.innerHTML = `
             <div class="gallery-card">
@@ -487,10 +499,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const originalBtnText = btn.innerHTML;
 
             if (file) {
+                // Cloudinary free tier limit for unsigned uploads is 10MB
+                if (file.size > 10 * 1024 * 1024) {
+                    alert(`The image is too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Please select an image under 10MB.`);
+                    return;
+                }
+
                 btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Uploading...';
                 btn.disabled = true;
 
                 try {
+                    // Let's add a timeout in case the network request is silently swallowed/blocked by PC adblockers or firewalls
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+
                     // 1. Upload image to Cloudinary (Unsigned)
                     const cloudName = 'dkfxbqj1g';
                     const uploadPreset = 'luxe_gallery_upload';
@@ -500,8 +522,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
                         method: 'POST',
-                        body: formData
+                        body: formData,
+                        signal: controller.signal
                     });
+
+                    clearTimeout(timeoutId);
 
                     const data = await response.json();
                     if (!response.ok) {
@@ -524,9 +549,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const docRef = await addDoc(collection(db, "artworks"), newArt);
                     newArt.id = docRef.id;
 
-                    // 3. Update UI
-                    const artEl = createArtworkElement(newArt);
-                    galleryGrid.appendChild(artEl);
+                    // UI update is handled automatically by onSnapshot listener
 
                     // 4. Reset form
                     uploadForm.reset();
@@ -537,7 +560,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     showToast('Artwork uploaded successfully!');
                 } catch (error) {
                     console.error("Error uploading artwork: ", error);
-                    showToast('Error uploading: ' + error.message);
+                    let errorMsg = error.message;
+                    if (error.name === 'AbortError') {
+                        errorMsg = 'Upload timed out. This may be due to a strict network firewall, an adblocker (try disabling it), or a slow connection.';
+                    }
+                    alert('Error uploading: ' + errorMsg);
+                    showToast('Error uploading: ' + errorMsg);
                 } finally {
                     btn.innerHTML = originalBtnText;
                     btn.disabled = false;
@@ -546,8 +574,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Call load function (Now we call it once on load)
-    loadSavedArtworks();
+    // loadSavedArtworks() is now ONLY called inside onAuthStateChanged 
+    // to prevent duplicate onSnapshot listeners firing from initial load + auth load
 
     // Re-render artworks when auth state changes so delete buttons accurate
     onAuthStateChanged(auth, (user) => {
