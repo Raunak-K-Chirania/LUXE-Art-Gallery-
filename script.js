@@ -623,6 +623,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const lightboxArtist = document.getElementById('lightboxArtist');
     let currentLightboxIndex = 0;
     let lightboxItems = [];
+    let panzoomInstance = null;
 
     window.openLightbox = function (btn) {
         const card = btn.closest('.gallery-card');
@@ -639,11 +640,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const itemSpline = c.querySelector('spline-viewer');
 
             // Only add to lightbox if there's an image (Spline interactive objects can't be put in standard image lightbox easily)
-            if (itemImg) {
+            if (itemImg && !itemSpline) {
+                const titleEl = c.querySelector('.artwork-title');
+                const artistEl = c.querySelector('.artwork-artist');
                 lightboxItems.push({
                     img: itemImg.src,
-                    title: c.querySelector('.artwork-title').textContent,
-                    artist: c.querySelector('.artwork-artist').textContent
+                    title: titleEl ? titleEl.textContent : 'Untitled',
+                    artist: artistEl ? artistEl.textContent : 'Unknown Artist'
                 });
             }
         });
@@ -665,11 +668,26 @@ document.addEventListener('DOMContentLoaded', () => {
         showLightboxItem(currentLightboxIndex);
         lightbox.classList.add('active');
         document.body.style.overflow = 'hidden';
+
+        // Initialize Panzoom if not already initialized
+        if (!panzoomInstance && typeof Panzoom !== 'undefined') {
+            panzoomInstance = Panzoom(lightboxImg, {
+                maxScale: 5,
+                contain: 'outside',
+                step: 0.3
+            });
+
+            // Allow wheel zoom
+            lightboxImg.parentElement.addEventListener('wheel', panzoomInstance.zoomWithWheel);
+        } else if (panzoomInstance) {
+            panzoomInstance.reset();
+        }
     };
 
     window.closeLightbox = function () {
         lightbox.classList.remove('active');
         document.body.style.overflow = '';
+        if (panzoomInstance) panzoomInstance.reset();
     };
 
     window.navigateLightbox = function (direction) {
@@ -677,6 +695,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentLightboxIndex < 0) currentLightboxIndex = lightboxItems.length - 1;
         if (currentLightboxIndex >= lightboxItems.length) currentLightboxIndex = 0;
         showLightboxItem(currentLightboxIndex);
+        if (panzoomInstance) panzoomInstance.reset();
     };
 
     function showLightboxItem(index) {
