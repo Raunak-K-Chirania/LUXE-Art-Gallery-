@@ -774,24 +774,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ========== CONTACT FORM ==========
-    window.handleContactSubmit = function (e) {
+    window.handleContactSubmit = async function (e) {
         e.preventDefault();
         const form = e.target;
         const btn = form.querySelector('button[type="submit"]');
         const originalText = btn.innerHTML;
 
-        btn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Message Sent!';
+        const name = document.getElementById('contactName').value;
+        const email = document.getElementById('contactEmail').value;
+        const subject = document.getElementById('contactSubject').value;
+        const message = document.getElementById('contactMessage').value;
+
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Sending...';
         btn.disabled = true;
-        btn.style.background = '#28a745';
 
-        showToast('Thank you! Your message has been sent successfully.');
+        try {
+            await addDoc(collection(db, "messages"), {
+                name: name,
+                email: email,
+                subject: subject,
+                message: message,
+                createdAt: new Date().toISOString()
+            });
 
-        setTimeout(() => {
-            form.reset();
+            btn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Message Sent!';
+            btn.style.background = '#28a745';
+            showToast('Thank you! Your message has been sent successfully.');
+
+            setTimeout(() => {
+                form.reset();
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                btn.style.background = '';
+            }, 3000);
+
+        } catch (error) {
+            console.error("Error sending message: ", error);
+            showToast("Failed to send message. Please try again later.");
             btn.innerHTML = originalText;
             btn.disabled = false;
-            btn.style.background = '';
-        }, 3000);
+        }
     };
 
     // ========== NEWSLETTER SUBSCRIBE ==========
