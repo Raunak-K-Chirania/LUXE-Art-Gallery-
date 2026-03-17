@@ -1,0 +1,4 @@
+## Firebase api keys
+node_modules
+.env
+firebase-config.js
