@@ -28,21 +28,6 @@ import {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ========== PRELOADER ==========
-    const preloader = document.getElementById('preloader');
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            preloader.classList.add('hidden');
-            setTimeout(() => preloader.remove(), 600);
-        }, 800);
-    });
-    // Fallback: hide preloader after 3s in case load event already fired
-    setTimeout(() => {
-        if (preloader) {
-            preloader.classList.add('hidden');
-        }
-    }, 3000);
-
     // ========== THEME TOGGLE ==========
     const themeToggle = document.getElementById('themeToggle');
 

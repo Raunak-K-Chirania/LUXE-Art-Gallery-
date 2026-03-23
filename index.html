@@ -1043,6 +1043,28 @@
     <script type="module" src="firebase-config.js"></script>
     <!-- Custom JS -->
     <script type="module" src="script.js"></script>
+    <!-- Preloader Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                const hidePreloader = () => {
+                    setTimeout(() => {
+                        preloader.classList.add('hidden');
+                        setTimeout(() => preloader.remove(), 600);
+                    }, 800);
+                };
+                window.addEventListener('load', hidePreloader);
+                // Fallback: hide preloader after 5s
+                setTimeout(() => {
+                    if (document.getElementById('preloader')) {
+                        preloader.classList.add('hidden');
+                        setTimeout(() => preloader.remove(), 600);
+                    }
+                }, 5000);
+            }
+        });
+    </script>
 </body>
 
 </html>
